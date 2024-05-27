@@ -1,6 +1,6 @@
 from typing import Literal
 import base64
-from IPython.display import Image, display
+from IPython.display import Image, display  # type: ignore
 
 def mermaid(
     graph: str,
