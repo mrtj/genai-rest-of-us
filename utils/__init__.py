@@ -1,6 +1,15 @@
 from typing import Literal
+import os, getpass
 import base64
 from IPython.display import Image, display  # type: ignore
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def ensure_openai_api_key():
+    if "OPENAI_API_KEY" not in os.environ:
+        os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter your OpenAI API key:")
 
 def mermaid(
     graph: str,
@@ -20,18 +29,3 @@ def mermaid(
     if verbose:
         print(url)
     display(Image(url=url, width=width, height=height))
-
-
-def rag(**kwargs):
-    return mermaid(f"""
-    graph LR
-        question(Question) --> prompt(Prompt)
-        question --> vector_store(Vector Store)
-        vector_store -- Retrieved<br/>documents --> prompt(Prompt)
-        prompt(Prompt) --> LLM
-        LLM --> response(Response)
-    """,
-        height=kwargs.pop("height", 200),
-        width=kwargs.pop("width", 800),
-        **kwargs,
-    )
